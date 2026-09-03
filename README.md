@@ -67,77 +67,12 @@
 
 ## 快速开始（从 GitHub 下载后）
 
-从 GitHub 下载 ZIP 解压（或 `git clone`）后，根据你的环境任选一种方式运行。三种方式选一种即可，推荐**方式 A（Docker）**。
 
-### 前置检查
-
-| 项目 | 要求 |
-| --- | --- |
-| 方式 A（Docker，推荐） | 安装 Docker Desktop（Windows/macOS）或 Docker Engine + compose 插件（Linux），无需 Java/Node/Maven |
-| 方式 B（源码运行） | JDK 17+、Maven 3.8+、Node.js 18+ |
-| 通用 | 80 / 8080 端口空闲；磁盘剩余 ≥ 2GB；可联网（默认走国内镜像） |
-
-> 目录名不限（中文目录名也支持），但**所有 docker 命令必须带 `-p cloudread` 指定项目名**，保持前后一致即可。
 
 ---
 
-### 方式 A：Docker 一键部署（推荐，下载即用）
 
-项目已封装 Docker，基础镜像与依赖源全部使用国内镜像（DaoCloud 加速、阿里云 Maven、npmmirror），国内网络可直接构建运行，且**不需要安装 Java / Node / Maven**。
-
-**第 1 步：安装并启动 Docker**
-
-- Windows / macOS：安装 [Docker Desktop](https://www.docker.com/products/docker-desktop/)，启动后任务栏图标变为运行中；
-- Linux（以 Ubuntu 为例）：
-
-  ```bash
-  sudo apt-get update
-  sudo apt-get install -y docker.io docker-compose-v2
-  sudo systemctl enable --now docker
-  ```
-
-验证：终端执行 `docker version`，能显示 Server 版本即就绪。
-
-**第 2 步：构建并启动**
-
-```bash
-# 进入解压后的项目根目录，执行：
-docker compose -p cloudread up -d --build
-```
-
-首次构建需要拉取基础镜像并下载依赖，**约 5-15 分钟**（取决于网络），之后启动只需几秒。
-
-**第 3 步：验证并访问**
-
-```bash
-docker compose -p cloudread ps          # 两个容器均为 Up，backend 显示 healthy
-```
-
-| 地址 | 说明 |
-| --- | --- |
-| http://localhost | 云阅前端页面 |
-| http://localhost:8080/doc.html | Knife4j 接口文档 |
-
-**常用运维命令**
-
-```bash
-docker compose -p cloudread ps                # 查看状态
-docker compose -p cloudread logs -f backend   # 查看后端日志
-docker compose -p cloudread up -d --build     # 代码更新后重建并重启（数据保留）
-docker compose -p cloudread down              # 停止服务（数据保留）
-docker compose -p cloudread down -v           # 停止并删除数据卷（重置为初始数据）
-```
-
-**数据与端口说明**
-
-- 首次启动自动初始化数据库与种子数据（管理员、演示用户、分类树、示例书籍）；
-- 数据持久化在命名卷 `cloudread_cloudread-data`（容器内 `/app/data`），删除容器不丢数据；
-- 端口映射：前端 80、后端 8080；如需修改，编辑根目录 `docker-compose.yml` 的 `ports` 后重新 `up -d`；
-- 更换基础镜像源：`docker compose -p cloudread build --build-arg BASE_REGISTRY=镜像地址`（默认 `docker.m.daocloud.io/library`）。
-
----
-
-### 方式 B：源码方式运行（不使用 Docker）
+### 源码方式运行（不使用 Docker）
 
 **第 1 步：安装依赖环境**
 
@@ -169,29 +104,7 @@ npm run dev
 
 ---
 
-### 方式 C：已有镜像，直接运行（不构建）
 
-如果从别人那里拿到的是**导出的镜像文件**（而不是源码）：
-
-```bash
-# 导入镜像（文件名以实际为准）
-docker load -i cloudread-images.tar
-
-# 直接启动（不带 --build，使用本地已有镜像）
-docker compose -p cloudread up -d
-```
-
-如果别人把镜像**推送到了镜像仓库**（如 Docker Hub / 阿里云 ACR），先登录并拉取：
-
-```bash
-docker login
-docker pull 仓库地址/cloudread-backend:1.0.0
-docker pull 仓库地址/cloudread-frontend:1.0.0
-```
-
-然后编辑 `docker-compose.yml`，把两个服务的 `image:` 改成仓库地址，再执行 `docker compose -p cloudread up -d`。
-
-> 方式 C 的数据同样是全新初始数据；如需带走原有数据，需额外迁移数据卷。
 
 ---
 
