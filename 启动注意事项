@@ -1,0 +1,7 @@
+如果初次启动失败，请进入 frontend 文件夹
+然后运行以下命令
+rmdir /s /q node_modules
+del package-lock.json
+npm install
+npm run dev
+重新启动即可成功
