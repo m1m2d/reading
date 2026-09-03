@@ -1,0 +1,86 @@
+server:
+  port: 8080
+  compression:
+    enabled: true
+
+spring:
+  application:
+    name: cloudread
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+  datasource:
+    url: jdbc:sqlite:${app.data-dir}/cloudread.db?busy_timeout=5000
+    driver-class-name: org.sqlite.JDBC
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 1
+      connection-timeout: 30000
+      idle-timeout: 60000
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      continue-on-error: false
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 2048MB
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=500,expireAfterWrite=60s
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,threaddump,heapdump,loggers
+  endpoint:
+    health:
+      show-details: always
+
+app:
+  data-dir: ./data
+  upload-dir: ./data/uploads
+  cover-dir: ./data/covers
+  image-dir: ./data/images
+  avatar-dir: ./data/avatars
+  tmp-dir: ./data/tmp
+  jwt:
+    # HS256 密钥（长度 >= 32 字节），生产环境请通过环境变量覆盖
+    secret: "CloudRead@2026!SecretKey_For_HMAC_SHA256_Signing_8f3a9c2e7b1d4a6f"
+    expire-hours: 24
+    refresh-hours: 168
+  cors:
+    allowed-origins: "http://localhost:5173,http://127.0.0.1:5173,http://localhost:8080"
+  slow-query-ms: 500
+
+logging:
+  level:
+    com.cloudread: info
+    org.springframework.security: warn
+  file:
+    name: ./data/logs/cloudread.log

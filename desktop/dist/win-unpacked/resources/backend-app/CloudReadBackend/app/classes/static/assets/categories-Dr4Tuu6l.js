@@ -1,0 +1,1 @@
+import{C as s}from"./index-BydSGfGs.js";import{g as i}from"./admin-BJ2JHYw8.js";const u=s("categories",{state:()=>({tree:[],loaded:!1}),actions:{async ensureLoaded(){this.loaded||(this.tree=await i(),this.loaded=!0)},findName(o){const t=a=>{for(const e of a){if(e.id===Number(o))return e.name;const r=t(e.children||[]);if(r)return r}return null};return t(this.tree)}}});export{u};

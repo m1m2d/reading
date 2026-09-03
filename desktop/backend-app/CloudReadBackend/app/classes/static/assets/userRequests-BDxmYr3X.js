@@ -1,0 +1,1 @@
+import{G as e}from"./index-D3e-6oY0.js";function u(s){return e.post("/user-requests/password-reset",s)}function a(s){return e.get("/admin/user-requests",{params:s})}function n(s,r){return e.post(`/admin/user-requests/${s}/reset-password`,{newPassword:r})}function o(s){return e.post(`/admin/user-requests/${s}/archive`)}export{o as a,a as l,n as r,u as s};

@@ -1,0 +1,27 @@
+# 后端
+backend/target/
+backend/data/
+backend/logs/
+
+# 前端
+frontend/node_modules/
+frontend/dist/
+
+# 编辑器与系统
+.idea/
+*.iml
+.vscode/
+*.log
+.DS_Store
+Thumbs.db
+
+# 本地环境配置
+.env
+.env.*
+!.env.example
+*.local
+
+# 打包产物（防止误传压缩包）
+*.tar
+*.tar.gz
+*.zip
